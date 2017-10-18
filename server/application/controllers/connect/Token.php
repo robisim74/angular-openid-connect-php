@@ -5,7 +5,7 @@ use OAuth2\Request;
 /* 
  * Token endpoint.
  */
-class Token extends OAuth2_Server
+class Token extends OAuth2_server
 {
     public function __construct()
     {
@@ -16,7 +16,7 @@ class Token extends OAuth2_Server
 
     public function index()
     {
-        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        // Handle a request for an OAuth2 Access Token and send the response to the client
         return $this->server->handleTokenRequest(Request::createFromGlobals())->send();
     }
 }

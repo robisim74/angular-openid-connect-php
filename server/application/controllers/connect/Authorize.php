@@ -6,12 +6,13 @@ use OAuth2\Response;
 /*
  * Authorization endpoint. 
  */
-class Authorize extends OAuth2_Server
+class Authorize extends OAuth2_server
 {
     public function __construct()
     {
         parent::__construct();
 
+        $this->load->library('form_validation');
         $this->load->helper('url');
     }
 
@@ -21,7 +22,8 @@ class Authorize extends OAuth2_Server
      */
     public function index()
     {
-        // Authentication.
+        // Authenticates End-User.
+        // http://openid.net/specs/openid-connect-implicit-1_0.html#Authenticates
         if (!$this->ion_auth->logged_in()) {
             // Stores the request.
             $uri_string = uri_string();
@@ -33,20 +35,33 @@ class Authorize extends OAuth2_Server
         }
 
         $request = Request::createFromGlobals();
-        $response = new Response();
+        
         
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if (!$this->server->validateAuthorizeRequest($request, $response)) {
-            $response->send();
+        if (!$this->server->validateAuthorizeRequest($request)) {
+            $this->server->getResponse()->send();
         }
-        
-        // End-User Consent/Authorization by default.  
-        // This can done by presenting the End-User with a dialogue that enables the End-User to recognize what is being consenting to and grant consent.
-        $is_authorized = true;
 
+        // Obtains End-User Consent/Authorization.
+        // http://openid.net/specs/openid-connect-implicit-1_0.html#Consent.
+        $memory = $this->server->getStorage('scope');
+        $scopes = $memory->supportedScopes;
+        $this->data['client_id'] = $this->input->get('client_id', TRUE);
+        $this->data['scopes'] = $scopes;
+        // Stores the request.
+        $this->session->set_flashdata('request', $request);
+
+        $this->load->view('connect/authorize/index', $this->data);
+    }
+
+    public function authorize_form_submit()
+    {
+		// Gets the request.
+        $request = $this->session->flashdata('request');
+        $response = new Response();
+        $is_authorized = isset($_POST['authorize']);
         $user_id = $this->ion_auth->get_user_id();
-        
-        // Calls the oauth server and returns the response.
+
         $this->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);
 
         $response->send();

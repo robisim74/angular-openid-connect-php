@@ -10,7 +10,7 @@ use OAuth2\Scope;
 /*
  * OAuth 2.0 Server configuration.
  */
-class OAuth2_Server extends CI_Controller
+class OAuth2_server extends CI_Controller
 {
     protected $storage;
     protected $server;
@@ -51,7 +51,7 @@ class OAuth2_Server extends CI_Controller
             'dsn' => $this->dsn, 'username' => $this->username, 'password' => $this->password
         ), $config);
                 
-        // Instantiates the OAuth2 Server.
+        // Instantiates the OAuth 2.0 Server.
         $this->server = new OAuth2Server($this->storage, array(
             'enforce_state' => true,
             'allow_implicit' => true,
@@ -70,7 +70,7 @@ class OAuth2_Server extends CI_Controller
     }
 
     /*
-     * Keys could also be stored in the PDO database by oauth_public_keys table.
+     * Keys could also be stored in the PDO database by "oauth_public_keys" table.
      */
     private function get_key_storage()
     {
@@ -84,7 +84,7 @@ class OAuth2_Server extends CI_Controller
     }
 
     /*
-     * Scopes could also be stored in the PDO database by oauth_scopes table.
+     * Scopes could also be stored in the PDO database by "oauth_scopes" table.
      */
     private function get_scopes()
     {

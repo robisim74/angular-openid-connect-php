@@ -1,18 +1,18 @@
 <h3>
-    Welcome to the OAuth 2.0 Server!
+    OAuth 2.0 Server
 </h3>
 <p>
-    You have been sent here by <strong>{{client_id}}</strong>. {{client_id}} would like to access the following data:
+    <strong><?= $client_id ?></strong> would like to access the following data:
 </p>
 
+<?php foreach ($scopes as $scope) : ?>
+    <p><?= $scope ?></p>
+<?php endforeach ?>
 
-<p>
-    Click the button below to complete the authorize request
-</p>
-<?php echo form_open('authorize/authorize_form_submit'); ?>
-
-    <input type="submit" name="authorize" value="Yes, I authorize this request" />
+<?php echo form_open('connect/authorize/authorize_form_submit'); ?>
 
     <input type="submit" name="cancel" value="Cancel" />
+
+    <input type="submit" name="authorize" value="I authorize this request" />   
 
 </form>

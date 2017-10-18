@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Resource extends OAuth2_Server
+class Resource extends OAuth2_server
 {
 
     public function __construct()

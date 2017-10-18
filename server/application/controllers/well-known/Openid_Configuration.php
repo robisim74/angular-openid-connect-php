@@ -8,7 +8,7 @@ use SimpleJWT\Keys\RSAKey;
  * Discovery endpoints.
  * @see https://openid.net/specs/openid-connect-discovery-1_0.html
  */
-class Openid_Configuration extends OAuth2_Server
+class Openid_Configuration extends OAuth2_server
 {
     public function __construct()
     {

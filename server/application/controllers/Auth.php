@@ -53,7 +53,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
 		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
 
-		// Get the request.
+		// Gets the request.
 		$request_url = $this->session->flashdata('request_url');
 
 		// Checks whether the user should be redirected to the Authorize endpoint.

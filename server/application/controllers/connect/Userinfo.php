@@ -9,7 +9,7 @@ use OAuth2\OpenID\Controller\UserInfoControllerInterface;
 /*
  * Userinfo endpoint.
  */
-class Userinfo extends OAuth2_Server implements UserInfoControllerInterface
+class Userinfo extends OAuth2_server implements UserInfoControllerInterface
 {
     public function __construct()
     {
@@ -46,7 +46,7 @@ class Userinfo extends OAuth2_Server implements UserInfoControllerInterface
      */
     public function handleUserInfoRequest(RequestInterface $request, ResponseInterface $response)
     {
-        // OAuth2 authentication.
+        // OAuth 2.0 authentication.
         if (!$this->server->verifyResourceRequest($request, $response, 'openid')) {
             return;
         }

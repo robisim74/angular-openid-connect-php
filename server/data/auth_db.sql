@@ -95,7 +95,7 @@ CREATE TABLE `login_attempts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
-# OAuth2 Server PHP
+# OAuth 2.0 Server PHP
 #
 
 CREATE TABLE oauth_clients (
