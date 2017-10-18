@@ -156,4 +156,4 @@ CREATE TABLE oauth_public_keys (
   encryption_algorithm VARCHAR(100) DEFAULT 'RS256'
 )
 
-INSERT INTO oauth_clients (client_id, client_secret, redirect_uri, grant_types, scope) VALUES ("angularclient", "clientsecret", "http://localhost:4200", "implicit", "openid offline_access profile roles resource");
+INSERT INTO oauth_clients (client_id, client_secret, redirect_uri, grant_types, scope) VALUES ("angularclient", "clientsecret", "http://localhost:4200", "implicit", "openid offline_access profile email groups resource");

@@ -32,10 +32,11 @@ class Openid_Configuration extends OAuth2_Server
         $scopes_supported = array_merge($reserved_scopes, $scopes);
 
         $standard_claims = array("sub");
-        $profile_claims = explode(" ", $this->OAuth2_Server_model::PROFILE_CLAIM_VALUES);
-        $email_claims = explode(" ", $this->OAuth2_Server_model::EMAIL_CLAIM_VALUES);
-        $address_claims = explode(" ", $this->OAuth2_Server_model::ADDRESS_CLAIM_VALUES);
-        $phone_claims = explode(" ", $this->OAuth2_Server_model::PHONE_CLAIM_VALUES);
+        // PDO Storage implements UserClaimsInterface, with the following constants.
+        $profile_claims = explode(" ", $this->storage::PROFILE_CLAIM_VALUES);
+        $email_claims = explode(" ", $this->storage::EMAIL_CLAIM_VALUES);
+        $address_claims = explode(" ", $this->storage::ADDRESS_CLAIM_VALUES);
+        $phone_claims = explode(" ", $this->storage::PHONE_CLAIM_VALUES);
         $claims_supported = array_merge(
             $standard_claims,
             $profile_claims,

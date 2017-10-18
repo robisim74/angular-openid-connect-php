@@ -33,7 +33,7 @@ export class AppModule {
         openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.client_id = 'angularclient';
         openIDImplicitFlowConfiguration.response_type = 'id_token token';
-        openIDImplicitFlowConfiguration.scope = 'openid offline_access profile roles resource';
+        openIDImplicitFlowConfiguration.scope = 'openid offline_access profile email groups resource';
         openIDImplicitFlowConfiguration.post_logout_redirect_uri = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.start_checksession = false;
         openIDImplicitFlowConfiguration.silent_renew = false;

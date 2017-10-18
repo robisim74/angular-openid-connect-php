@@ -28,7 +28,7 @@ class OAuth2_Server extends CI_Controller
         $this->output->set_header('Access-Control-Allow-Headers: Authorization');
 
         $this->load->database();
-        $this->load->model('OAuth2_Server_model');
+        $this->load->library('ion_auth');
 
         // Gets database config values.
         $this->dsn = $this->db->dsn;
@@ -40,9 +40,18 @@ class OAuth2_Server extends CI_Controller
 
     private function setup()
     {
-        $this->storage = new Pdo(array('dsn' => $this->dsn, 'username' => $this->username, 'password' => $this->password));
+        // Uses Ion Auth "users" table as OAuth2 user_table.
+        //
+        // To match claims, you need to redefine the "users" table attributes.
+        // http://openid.net/specs/openid-connect-core-1_0.html#Claims
+        $config = array(
+            'user_table' => 'users'
+        );
+        $this->storage = new Pdo(array(
+            'dsn' => $this->dsn, 'username' => $this->username, 'password' => $this->password
+        ), $config);
                 
-        // Instantiates the OAuthn 2.0 server.
+        // Instantiates the OAuth2 Server.
         $this->server = new OAuth2Server($this->storage, array(
             'enforce_state' => true,
             'allow_implicit' => true,
@@ -83,7 +92,8 @@ class OAuth2_Server extends CI_Controller
         $defaultScope = 'profile';
         $supportedScopes = array(
             'profile',
-            'roles',
+            'email',
+            'groups',
             'resource'
         );
         $memory = new Memory(array(

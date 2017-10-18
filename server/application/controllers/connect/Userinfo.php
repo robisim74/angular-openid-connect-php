@@ -52,13 +52,28 @@ class Userinfo extends OAuth2_Server implements UserInfoControllerInterface
         }
 
         $token = $this->server->getAccessTokenData($request, $response);
+        
+        // The default behavior is to use "username" as the user_id.
+        $user = $this->ion_auth->user($token['user_id'])->row();
 
-        //$claims = $this->OAuth2_Server_model->getUserClaims($token['user_id'], $token['scope']);
+        // Groups of claims are returned based on the requested scopes.
+        // Scopes with matching claims: profile, email, address, phone.
+        // http://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
+        $claims = $this->storage->getUserClaims($user->username, $token['scope']);
+        
         // The sub Claim MUST always be returned in the UserInfo Response.
         // http://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse
-        $claims = array(
-            'sub' => $token['user_id']
+        $claims += array(
+            'sub' => $token['user_id'],
         );
+
+        // Custom claims.
+        // Groups.
+        $groups = $this->ion_auth->groups()->result_array();
+        $claims += array(
+            'groups' => $groups
+        );
+
         $response->addParameters($claims);
 
         return $response;

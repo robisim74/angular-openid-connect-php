@@ -12,7 +12,6 @@ class Authorize extends OAuth2_Server
     {
         parent::__construct();
 
-        $this->load->library('ion_auth');
         $this->load->helper('url');
     }
 
