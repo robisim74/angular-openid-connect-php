@@ -33,7 +33,7 @@ export class AppModule {
         openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.client_id = 'angularclient';
         openIDImplicitFlowConfiguration.response_type = 'id_token token';
-        openIDImplicitFlowConfiguration.scope = 'openid';
+        openIDImplicitFlowConfiguration.scope = 'openid offline_access profile roles resource';
         openIDImplicitFlowConfiguration.post_logout_redirect_uri = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.start_checksession = false;
         openIDImplicitFlowConfiguration.silent_renew = false;
@@ -41,7 +41,7 @@ export class AppModule {
         openIDImplicitFlowConfiguration.startup_route = '/home';
         openIDImplicitFlowConfiguration.forbidden_route = '/forbidden';
         openIDImplicitFlowConfiguration.unauthorized_route = '/unauthorized';
-        openIDImplicitFlowConfiguration.auto_userinfo = false;
+        openIDImplicitFlowConfiguration.auto_userinfo = true;
         openIDImplicitFlowConfiguration.log_console_warning_active = true;
         openIDImplicitFlowConfiguration.log_console_debug_active = true;
         openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds = 10;

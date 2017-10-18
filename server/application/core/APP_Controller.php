@@ -5,21 +5,30 @@ use OAuth2\Response;
 use OAuth2\Server as OAuth2Server;
 use OAuth2\Storage\Pdo;
 use OAuth2\Storage\Memory;
+use OAuth2\Scope;
 
-class Server_model extends CI_Model
+/*
+ * OAuth 2.0 Server configuration.
+ */
+class OAuth2_Server extends CI_Controller
 {
-    public $storage;
+    protected $storage;
+    protected $server;
 
-    public $server;
-
-    private $dsn;
-    private $username;
-    private $password;
+    protected $dsn;
+    protected $username;
+    protected $password;
 
     public function __construct()
     {
         parent::__construct();
+        // Allows CORS.
+        $this->output->set_header('Access-Control-Allow-Origin: *');
+        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        $this->output->set_header('Access-Control-Allow-Headers: Authorization');
+
         $this->load->database();
+        $this->load->model('OAuth2_Server_model');
 
         // Gets database config values.
         $this->dsn = $this->db->dsn;
@@ -29,7 +38,7 @@ class Server_model extends CI_Model
         $this->setup();
     }
 
-    public function setup()
+    private function setup()
     {
         $this->storage = new Pdo(array('dsn' => $this->dsn, 'username' => $this->username, 'password' => $this->password));
                 
@@ -43,18 +52,45 @@ class Server_model extends CI_Model
             'encryption_algorithm' => 'RS256'
         ));
 
+        // In memory.
         $this->server->addStorage($this->get_key_storage(), 'public_key');
+
+        $scope_util = new Scope($this->get_scopes());
+        $this->server->setScopeUtil($scope_util);
+        $this->server->addStorage($this->get_scopes(), 'scope');
     }
 
+    /*
+     * Keys could also be stored in the PDO database by oauth_public_keys table.
+     */
     private function get_key_storage()
     {
         $public_key = file_get_contents($this->get_project_root() . '/data/pubkey.pem');
         $private_key = file_get_contents($this->get_project_root() . '/data/privkey.pem');
-        $keyStorage = new Memory(array('keys' => array(
+        $memory = new Memory(array('keys' => array(
             'public_key' => $public_key,
             'private_key' => $private_key,
         )));
-        return $keyStorage;
+        return $memory;
+    }
+
+    /*
+     * Scopes could also be stored in the PDO database by oauth_scopes table.
+     */
+    private function get_scopes()
+    {
+        // Scopes.
+        $defaultScope = 'profile';
+        $supportedScopes = array(
+            'profile',
+            'roles',
+            'resource'
+        );
+        $memory = new Memory(array(
+            'default_scope' => $defaultScope,
+            'supported_scopes' => $supportedScopes
+        ));
+        return $memory;
     }
 
     private function get_project_root()

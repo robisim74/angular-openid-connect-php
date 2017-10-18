@@ -137,16 +137,6 @@ CREATE TABLE oauth_refresh_tokens (
   PRIMARY KEY (refresh_token)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE oauth_users (
-  username            VARCHAR(80),
-  password            VARCHAR(80),
-  first_name          VARCHAR(80),
-  last_name           VARCHAR(80),
-  email               VARCHAR(80),
-  email_verified      BOOLEAN,
-  scope               VARCHAR(4000)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE oauth_scopes (
   scope               VARCHAR(80)     NOT NULL,
   is_default          BOOLEAN,
@@ -159,4 +149,11 @@ CREATE TABLE oauth_jwt (
   public_key          VARCHAR(2000)   NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO oauth_clients (client_id, client_secret, redirect_uri) VALUES ("angularclient", "clientsecret", "http://localhost:4200/");
+CREATE TABLE oauth_public_keys (
+  client_id            VARCHAR(80),
+  public_key           VARCHAR(2000),
+  private_key          VARCHAR(2000),
+  encryption_algorithm VARCHAR(100) DEFAULT 'RS256'
+)
+
+INSERT INTO oauth_clients (client_id, client_secret, redirect_uri, grant_types, scope) VALUES ("angularclient", "clientsecret", "http://localhost:4200", "implicit", "openid offline_access profile roles resource");

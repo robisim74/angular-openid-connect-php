@@ -6,17 +6,14 @@ use OAuth2\Response;
 /*
  * Authorization endpoint. 
  */
-class Authorize extends CI_Controller
+class Authorize extends OAuth2_Server
 {
     public function __construct()
     {
         parent::__construct();
-        // Allows CORS.
-        $this->output->set_header('Access-Control-Allow-Origin: *');
 
         $this->load->library('ion_auth');
         $this->load->helper('url');
-        $this->load->model('Server_model');
     }
 
     /**
@@ -30,9 +27,8 @@ class Authorize extends CI_Controller
             // Stores the request.
             $uri_string = uri_string();
             $query_string = $this->input->server('QUERY_STRING');
-            $request_uri = $uri_string . '?' . $query_string;
-            echo $request_uri;
-            $this->session->set_userdata(array('last_url' => $request_uri));
+            $request_url = $uri_string . '?' . $query_string;
+            $this->session->set_flashdata('request_url', $request_url);
             // Redirects to login.
             redirect('auth/login', 'refresh');
         }
@@ -41,7 +37,7 @@ class Authorize extends CI_Controller
         $response = new Response();
         
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if (!$this->Server_model->server->validateAuthorizeRequest($request, $response)) {
+        if (!$this->server->validateAuthorizeRequest($request, $response)) {
             $response->send();
         }
         
@@ -52,8 +48,8 @@ class Authorize extends CI_Controller
         $user_id = $this->ion_auth->get_user_id();
         
         // Calls the oauth server and returns the response.
-        $this->Server_model->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);
-        
+        $this->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);
+
         $response->send();
     }
 }
