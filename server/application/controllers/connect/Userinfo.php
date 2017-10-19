@@ -46,7 +46,7 @@ class Userinfo extends OAuth2_server implements UserInfoControllerInterface
      */
     public function handleUserInfoRequest(RequestInterface $request, ResponseInterface $response)
     {
-        // OAuth 2.0 authentication.
+        // OAuth 2.0 authentication: "openid" scope.
         if (!$this->server->verifyResourceRequest($request, $response, 'openid')) {
             return;
         }

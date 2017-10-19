@@ -25,7 +25,7 @@ class OAuth2_server extends CI_Controller
         // Allows CORS.
         $this->output->set_header('Access-Control-Allow-Origin: *');
         $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        $this->output->set_header('Access-Control-Allow-Headers: Authorization');
+        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
         $this->load->database();
         $this->load->library('ion_auth');

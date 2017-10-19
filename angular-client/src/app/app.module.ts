@@ -1,10 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration } from 'angular-auth-oidc-client';
 
 import { AppRoutingModule } from './app-routing.module';
+
+import { AuthService } from './services/auth.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -19,10 +22,13 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     imports: [
         BrowserModule,
         AppRoutingModule,
+        HttpClientModule,
         HttpModule,
         AuthModule.forRoot()
     ],
-    providers: [],
+    providers: [
+        AuthService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
