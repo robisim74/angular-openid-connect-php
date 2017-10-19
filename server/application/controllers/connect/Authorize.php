@@ -40,13 +40,14 @@ class Authorize extends OAuth2_server
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
         if (!$this->server->validateAuthorizeRequest($request)) {
             $this->server->getResponse()->send();
+            die;
         }
 
         // Obtains End-User Consent/Authorization.
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Consent.
         $memory = $this->server->getStorage('scope');
         $scopes = $memory->supportedScopes;
-        $this->data['client_id'] = $this->input->get('client_id', TRUE);
+        $this->data['client_id'] = $request->query('client_id');
         $this->data['scopes'] = $scopes;
         // Stores the request.
         $this->session->set_flashdata('request', $request);

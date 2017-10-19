@@ -40,25 +40,36 @@ class OAuth2_server extends CI_Controller
 
     private function setup()
     {
-        // Uses Ion Auth "users" table as OAuth2 user_table.
+        // Uses Ion Auth "users" table as OAuth2 "user_table".
         //
         // To match claims, you need to redefine the "users" table attributes.
         // http://openid.net/specs/openid-connect-core-1_0.html#Claims
         $config = array(
             'user_table' => 'users'
         );
+        // MySql db.
         $this->storage = new Pdo(array(
             'dsn' => $this->dsn, 'username' => $this->username, 'password' => $this->password
         ), $config);
                 
-        // Instantiates the OAuth 2.0 Server.
+        // OAuth 2.0 Server configuration.
         $this->server = new OAuth2Server($this->storage, array(
             'enforce_state' => true,
             'allow_implicit' => true,
             'use_openid_connect' => true,
             'issuer' => $_SERVER['HTTP_HOST'],
-            'use_jwt_access_tokens' => true,
-            'encryption_algorithm' => 'RS256'
+            /*
+             * Where a self-contained token (JWT token) is hard to revoke before its expiration time, 
+             * a reference token only lives as long as it exists in the STS data store. This allows for scenarios like:
+             *
+             * - revoking the token in an “emergency” case (lost phone, phishing attack etc.)
+             * - invalidate tokens at user logout time or app uninstall
+             * https://leastprivilege.com/2015/11/25/reference-tokens-and-introspection/
+             * 
+             *'use_jwt_access_tokens' => true,
+             */
+            'id_lifetime' => 3600,
+            'access_lifetime' => 3600
         ));
 
         // In memory.

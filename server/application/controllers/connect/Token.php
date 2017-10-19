@@ -12,9 +12,11 @@ class Token extends OAuth2_server
         parent::__construct();
     }
 
+    /*
+     * Not used with implicit flow.
+     */
     public function index()
     {
-        // Handle a request for an OAuth2 Access Token and send the response to the client.
-        return $this->server->handleTokenRequest(Request::createFromGlobals())->send();
+        /* return $this->server->handleTokenRequest(Request::createFromGlobals())->send(); */
     }
 }

@@ -3,7 +3,7 @@
 use OAuth2\Request;
 
 /* 
- * Token endpoint.
+ * Checksession endpoint.
  */
 class Checksession extends OAuth2_server
 {
@@ -14,6 +14,6 @@ class Checksession extends OAuth2_server
 
     public function index()
     {
-
+        // TODO
     }
 }

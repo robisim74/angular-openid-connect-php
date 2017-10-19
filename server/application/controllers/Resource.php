@@ -29,12 +29,16 @@ class Resource extends OAuth2_server
         // OAuth 2.0 authentication: "resource" scope.
         if (!$this->server->verifyResourceRequest($request, $response, 'resource')) {
             $this->server->getResponse()->send();
+            die;
         }
 
         // Allowed groups: "members".
         $token = $this->server->getAccessTokenData($request, $response);
         if (!$this->ion_auth->in_group(['members'], $token['user_id'])) {
-            return;
+            // Unauthorized.
+            $response->setError(401, 'Invalid group');
+            $response->send();
+            die;
         };
 
         /*

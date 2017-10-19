@@ -109,7 +109,7 @@ CREATE TABLE oauth_clients (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE oauth_access_tokens (
-  access_token         VARCHAR(1000)  NOT NULL,
+  access_token         VARCHAR(40)  NOT NULL,
   client_id            VARCHAR(80)    NOT NULL,
   user_id              VARCHAR(80),
   expires              TIMESTAMP      NOT NULL,

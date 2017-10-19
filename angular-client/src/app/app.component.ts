@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+
+import { AuthService } from './services/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -12,7 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
     isAuthorizedSubscription: Subscription;
     isAuthorized: boolean;
 
-    constructor(public oidcSecurityService: OidcSecurityService) {
+    constructor(
+        private router: Router,
+        private oidcSecurityService: OidcSecurityService,
+        private auth: AuthService
+    ) {
         if (this.oidcSecurityService.moduleSetup) {
             this.doCallbackLogicIfRequired();
         } else {
@@ -20,6 +28,15 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.doCallbackLogicIfRequired();
             });
         }
+
+        // Manages route on authorized = 1, forbidden = 2, unauthorized = 3.
+        this.oidcSecurityService.onAuthorizationResult.subscribe(
+            (result: any) => {
+                if (result == 1) {
+                    this.router.navigate(['/resource']);
+                }
+            }
+        );
     }
 
     ngOnInit() {
@@ -46,6 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     logout() {
         console.log('start logoff');
+
+        this.auth.revokeToken();
+
         this.oidcSecurityService.logoff();
     }
 
