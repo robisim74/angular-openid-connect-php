@@ -3,7 +3,7 @@
 use OAuth2\Request;
 
 /* 
- * Token endpoint.
+ * Token endpoint: not used with implicit flow.
  */
 class Token extends OAuth2_server
 {
@@ -12,9 +12,6 @@ class Token extends OAuth2_server
         parent::__construct();
     }
 
-    /*
-     * Not used with implicit flow.
-     */
     public function index()
     {
         /* return $this->server->handleTokenRequest(Request::createFromGlobals())->send(); */

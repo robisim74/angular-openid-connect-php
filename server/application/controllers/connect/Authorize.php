@@ -4,7 +4,9 @@ use OAuth2\Request;
 use OAuth2\Response;
 
 /*
- * Authorization endpoint. 
+ * Authorization endpoint.
+ * 
+ * @see http://openid.net/specs/openid-connect-implicit-1_0.html
  */
 class Authorize extends OAuth2_server
 {
@@ -35,8 +37,7 @@ class Authorize extends OAuth2_server
         }
 
         $request = Request::createFromGlobals();
-        
-        
+                
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
         if (!$this->server->validateAuthorizeRequest($request)) {
             $this->server->getResponse()->send();

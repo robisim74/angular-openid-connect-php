@@ -6,6 +6,7 @@ use SimpleJWT\Keys\RSAKey;
 
 /*
  * Discovery endpoints.
+ * 
  * @see https://openid.net/specs/openid-connect-discovery-1_0.html
  */
 class Openid_Configuration extends OAuth2_server
@@ -67,7 +68,8 @@ class Openid_Configuration extends OAuth2_server
     }
 
     /* 
-     * JSON Web Key Set [JWK] document: /.well-known/openid-configuration/jwks  
+     * JSON Web Key Set [JWK] document: /.well-known/openid-configuration/jwks
+     * 
      * @see https://tools.ietf.org/html/rfc7517
      */
     public function jwks()

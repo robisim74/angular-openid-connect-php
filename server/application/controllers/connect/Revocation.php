@@ -4,7 +4,9 @@ use OAuth2\Request;
 use OAuth2\Response;
 
 /*
- * Revocation endpoint.
+ * Revocation endpoint: only for reference tokens.
+ * 
+ * @see https://tools.ietf.org/html/rfc7009
  */
 class Revocation extends OAuth2_server
 {
@@ -13,9 +15,6 @@ class Revocation extends OAuth2_server
         parent::__construct();
     }
 
-    /*
-     * Access token is a reference token and not a JWT token.
-     */
     public function index()
     {
         $request = Request::createFromGlobals();

@@ -8,6 +8,8 @@ use OAuth2\OpenID\Controller\UserInfoControllerInterface;
 
 /*
  * Userinfo endpoint.
+ * 
+ * @see http://openid.net/specs/openid-connect-core-1_0.html#UserInfo
  */
 class Userinfo extends OAuth2_server implements UserInfoControllerInterface
 {
@@ -31,19 +33,6 @@ class Userinfo extends OAuth2_server implements UserInfoControllerInterface
         $this->handleUserInfoRequest($request, $response)->send();
     }
 
-    /**
-     * Return claims about the authenticated end-user.
-     * This would be called from the "/UserInfo" endpoint as defined in the spec.
-     *
-     * @param RequestInterface  $request  - Request object to grant access token
-     * @param ResponseInterface $response - Response object containing error messages (failure) or user claims (success)
-     * @return ResponseInterface
-     *
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
-     *
-     * @see http://openid.net/specs/openid-connect-core-1_0.html#UserInfo
-     */
     public function handleUserInfoRequest(RequestInterface $request, ResponseInterface $response)
     {
         // OAuth 2.0 authentication: "openid" scope.

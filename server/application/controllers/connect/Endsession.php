@@ -5,6 +5,8 @@ use OAuth2\Response;
 
 /*
  * Endsession endpoint.
+ * 
+ * @see http://openid.net/specs/openid-connect-session-1_0.html
  */
 class Endsession extends OAuth2_server
 {

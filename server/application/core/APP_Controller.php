@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use OAuth2\Request;
 use OAuth2\Response;
+use OAuth2\RequestInterface;
+use OAuth2\ResponseInterface;
 use OAuth2\Server as OAuth2Server;
 use OAuth2\Storage\Pdo;
 use OAuth2\Storage\Memory;
@@ -14,6 +17,8 @@ class OAuth2_server extends CI_Controller
 {
     protected $storage;
     protected $server;
+
+    protected $response;
 
     protected $dsn;
     protected $username;
@@ -36,6 +41,33 @@ class OAuth2_server extends CI_Controller
         $this->password = $this->db->password;
 
         $this->setup();
+    }
+
+    protected function authorize(RequestInterface $request, $scope, $groups)
+    {
+        $this->response = new Response();
+
+        // Browsers preflight the request to look for CORS headers.
+        // If the request is acceptable, then they will send the real request.
+        $bearer = $request->headers('Authorization', null);
+        if (is_null($bearer)) {
+            return FALSE;
+        }
+
+        // OAuth 2.0 authentication & scope.
+        if (!$this->server->verifyResourceRequest($request, $this->response, $scope)) {
+            $this->response = $this->server->getResponse();
+            return FALSE;
+        }
+
+        // Allowed groups.
+        $token = $this->server->getAccessTokenData($request, $this->response);
+        if (!$this->ion_auth->in_group($groups, $token['user_id'])) {
+            $this->response->setError(401, 'Invalid group');
+            return FALSE;
+        }
+
+        return TRUE;
     }
 
     private function setup()
