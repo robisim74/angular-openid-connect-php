@@ -1,5 +1,4 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 use OAuth2\Request;
 use OAuth2\Response;
@@ -13,12 +12,14 @@ use OAuth2\Scope;
 /*
  * OAuth 2.0 Server configuration.
  */
-class OAuth2_server extends CI_Controller
+class OAuth2_server
 {
-    protected $storage;
-    protected $server;
+    public $storage;
+    public $server;
 
-    protected $response;
+    public $response;
+
+    protected $CI;
 
     protected $dsn;
     protected $username;
@@ -26,24 +27,21 @@ class OAuth2_server extends CI_Controller
 
     public function __construct()
     {
-        parent::__construct();
-        // Allows CORS.
-        $this->output->set_header('Access-Control-Allow-Origin: *');
-        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        // Assigns the CodeIgniter super-object.
+        $this->CI = &get_instance();
 
-        $this->load->database();
-        $this->load->library('ion_auth');
+        $this->CI->load->database();
+        $this->CI->load->library('ion_auth');
 
         // Gets database config values.
-        $this->dsn = $this->db->dsn;
-        $this->username = $this->db->username;
-        $this->password = $this->db->password;
+        $this->dsn = $this->CI->db->dsn;
+        $this->username = $this->CI->db->username;
+        $this->password = $this->CI->db->password;
 
         $this->setup();
     }
 
-    protected function authorize(RequestInterface $request, $scope, $groups)
+    public function authorize(RequestInterface $request, $scope, $groups)
     {
         $this->response = new Response();
 
@@ -62,7 +60,7 @@ class OAuth2_server extends CI_Controller
 
         // Allowed groups.
         $token = $this->server->getAccessTokenData($request, $this->response);
-        if (!$this->ion_auth->in_group($groups, $token['user_id'])) {
+        if (!$this->CI->ion_auth->in_group($groups, $token['user_id'])) {
             $this->response->setError(401, 'Invalid group');
             return FALSE;
         }

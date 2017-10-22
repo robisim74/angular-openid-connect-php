@@ -35,7 +35,7 @@ export class AppModule {
 
     constructor(public oidcSecurityService: OidcSecurityService) {
         const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
-        openIDImplicitFlowConfiguration.stsServer = 'http://localhost/angular-openid-connect-php/server/index.php';
+        openIDImplicitFlowConfiguration.stsServer = 'http://localhost/angular-openid-connect-php/server';
         openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.client_id = 'angularclient';
         openIDImplicitFlowConfiguration.response_type = 'id_token token';

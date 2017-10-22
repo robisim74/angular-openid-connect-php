@@ -6,11 +6,18 @@ use OAuth2\Response;
 /*
  * Resource API controller.
  */
-class Resource extends OAuth2_server
+class Resource extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
+        // Allows CORS.
+        $this->output->set_header('Access-Control-Allow-Origin: *');
+        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        
+        // OAuth 2.0 Server.
+        $this->load->library('oauth2_server');
     }
 
     public function index()
@@ -18,10 +25,10 @@ class Resource extends OAuth2_server
         /*
          * OAuth 2.0 authentication: 'resource' scope & 'members' group.
          */
-        If (!$this->authorize(Request::createFromGlobals(), 'resource', ['members'])) {
-            if (!$this->response->isSuccessful()) {
-                $this->response->send();
-                die;
+        If (!$this->oauth2_server->authorize(Request::createFromGlobals(), 'resource', ['members'])) {
+            if (!$this->oauth2_server->response->isSuccessful()) {
+                $this->oauth2_server->response->send();
+                die();
             }
             else {
                 return;

@@ -9,11 +9,21 @@ use SimpleJWT\Keys\RSAKey;
  * 
  * @see https://openid.net/specs/openid-connect-discovery-1_0.html
  */
-class Openid_Configuration extends OAuth2_server
+class Openid_Configuration extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
+        // Allows CORS.
+        $this->output->set_header('Access-Control-Allow-Origin: *');
+        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+        // Authentication library.
+        $this->load->library('ion_auth');
+        
+        // OAuth 2.0 Server.
+        $this->load->library('oauth2_server');
     }
 
     /* 
@@ -22,22 +32,21 @@ class Openid_Configuration extends OAuth2_server
     public function index()
     {
         $issuer = $_SERVER['HTTP_HOST'];
-        $base_url = $this->config->item('base_url');
-        $index_page = $this->config->item('index_page');
-        $uri = $base_url . "/" . $index_page;
+
+        // Gets the base URL.
+        $base_url = base_url();
 
         $scope_util = new Scope();
         $reserved_scopes = $scope_util->getReservedScopes();
-        $memory = $this->server->getStorage('scope');
-        $scopes = $memory->supportedScopes;
+        $scopes = $this->oauth2_server->server->getStorage('scope')->supportedScopes;
         $scopes_supported = array_merge($reserved_scopes, $scopes);
 
         $standard_claims = array("sub");
         // PDO Storage implements UserClaimsInterface, with the following constants.
-        $profile_claims = explode(" ", $this->storage::PROFILE_CLAIM_VALUES);
-        $email_claims = explode(" ", $this->storage::EMAIL_CLAIM_VALUES);
-        $address_claims = explode(" ", $this->storage::ADDRESS_CLAIM_VALUES);
-        $phone_claims = explode(" ", $this->storage::PHONE_CLAIM_VALUES);
+        $profile_claims = explode(" ", $this->oauth2_server->storage::PROFILE_CLAIM_VALUES);
+        $email_claims = explode(" ", $this->oauth2_server->storage::EMAIL_CLAIM_VALUES);
+        $address_claims = explode(" ", $this->oauth2_server->storage::ADDRESS_CLAIM_VALUES);
+        $phone_claims = explode(" ", $this->oauth2_server->storage::PHONE_CLAIM_VALUES);
         $claims_supported = array_merge(
             $standard_claims,
             $profile_claims,
@@ -48,14 +57,14 @@ class Openid_Configuration extends OAuth2_server
 
         $arr = array(
             "issuer" => $issuer,
-            "jwks_uri" => $uri . "/.well-known/openid-configuration/jwks",
-            "authorization_endpoint" => $uri . "/connect/authorize",
-            "token_endpoint" => $uri . "/connect/token",
-            "userinfo_endpoint" => $uri . "/connect/userinfo",
-            "end_session_endpoint" => $uri . "/connect/endsession",
-            "check_session_iframe" => $uri . "/connect/checksession",
-            "revocation_endpoint" => $uri . "/connect/revocation",
-            "introspection_endpoint" => $uri . "/connect/introspect",
+            "jwks_uri" => $base_url . ".well-known/openid-configuration/jwks",
+            "authorization_endpoint" => $base_url . "connect/authorize",
+            "token_endpoint" => $base_url . "connect/token",
+            "userinfo_endpoint" => $base_url . "connect/userinfo",
+            "end_session_endpoint" => $base_url . "connect/endsession",
+            "check_session_iframe" => $base_url . "connect/checksession",
+            "revocation_endpoint" => $base_url . "connect/revocation",
+            "introspection_endpoint" => $base_url . "connect/introspect",
             "scopes_supported" => $scopes_supported,
             "claims_supported" => $claims_supported,
             "grant_types_supported" => ["implicit"],
@@ -74,8 +83,7 @@ class Openid_Configuration extends OAuth2_server
      */
     public function jwks()
     {
-        $memory = $this->server->getStorage('public_key');
-        $public_key = $memory->getPublicKey();
+        $public_key = $this->oauth2_server->server->getStorage('public_key')->getPublicKey();
 
         // Generates JWK Set.
         $set = new KeySet();

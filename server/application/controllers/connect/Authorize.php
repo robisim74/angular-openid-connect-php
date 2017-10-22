@@ -8,14 +8,23 @@ use OAuth2\Response;
  * 
  * @see http://openid.net/specs/openid-connect-implicit-1_0.html
  */
-class Authorize extends OAuth2_server
+class Authorize extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
+        // Allows CORS.
+        $this->output->set_header('Access-Control-Allow-Origin: *');
+        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
         $this->load->library('form_validation');
-        $this->load->helper('url');
+
+        // Authentication library.
+        $this->load->library('ion_auth');
+
+        // OAuth 2.0 Server.
+        $this->load->library('oauth2_server');
     }
 
     /**
@@ -28,9 +37,7 @@ class Authorize extends OAuth2_server
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Authenticates
         if (!$this->ion_auth->logged_in()) {
             // Stores the request.
-            $uri_string = uri_string();
-            $query_string = $this->input->server('QUERY_STRING');
-            $request_url = $uri_string . '?' . $query_string;
+            $request_url = 'connect/authorize' . '?' . $_SERVER['QUERY_STRING'];
             $this->session->set_flashdata('request_url', $request_url);
             // Redirects to login.
             redirect('auth/login', 'refresh');
@@ -39,17 +46,18 @@ class Authorize extends OAuth2_server
         $request = Request::createFromGlobals();
                 
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if (!$this->server->validateAuthorizeRequest($request)) {
-            $this->server->getResponse()->send();
-            die;
+        if (!$this->oauth2_server->server->validateAuthorizeRequest($request)) {
+            $this->oauth2_server->server->getResponse()->send();
+            die();
         }
 
         // Obtains End-User Consent/Authorization.
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Consent.
-        $memory = $this->server->getStorage('scope');
-        $scopes = $memory->supportedScopes;
+        $scopes = $this->oauth2_server->server->getStorage('scope')->supportedScopes;
+
         $this->data['client_id'] = $request->query('client_id');
         $this->data['scopes'] = $scopes;
+
         // Stores the request.
         $this->session->set_flashdata('request', $request);
 
@@ -61,10 +69,11 @@ class Authorize extends OAuth2_server
 		// Gets the request.
         $request = $this->session->flashdata('request');
         $response = new Response();
+
         $is_authorized = isset($_POST['authorize']);
         $user_id = $this->ion_auth->get_user_id();
 
-        $this->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);
+        $this->oauth2_server->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);
 
         $response->send();
     }
