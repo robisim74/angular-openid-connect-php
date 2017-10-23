@@ -21,9 +21,9 @@ class OAuth2_server
 
     protected $CI;
 
-    protected $dsn;
-    protected $username;
-    protected $password;
+    private $dsn;
+    private $username;
+    private $password;
 
     public function __construct()
     {
@@ -44,13 +44,6 @@ class OAuth2_server
     public function authorize(RequestInterface $request, $scope, $groups)
     {
         $this->response = new Response();
-
-        // Browsers preflight the request to look for CORS headers.
-        // If the request is acceptable, then they will send the real request.
-        $bearer = $request->headers('Authorization', null);
-        if (is_null($bearer)) {
-            return FALSE;
-        }
 
         // OAuth 2.0 authentication & scope.
         if (!$this->server->verifyResourceRequest($request, $this->response, $scope)) {

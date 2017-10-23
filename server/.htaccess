@@ -1,7 +1,4 @@
 <IfModule mod_rewrite.c>
-	#--- Uncomment this line for production or testing server
-	#SetEnv CI_ENV production
-
 	#--- URL rewrite
 	#--- Note: require Rewrite mod enabled (sudo a2enmod rewrite)
 	RewriteEngine On

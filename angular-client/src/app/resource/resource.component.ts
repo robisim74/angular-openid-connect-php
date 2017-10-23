@@ -17,7 +17,7 @@ export class ResourceComponent implements OnInit {
     ngOnInit() {
         // Sends an authenticated request.
         this.http
-            .get("http://localhost/angular-openid-connect-php/server/index.php/resource", {
+            .get("http://localhost/angular-openid-connect-php/server/api/resource", {
                 headers: this.auth.getAuthorizationHeader()
             })
             .subscribe(

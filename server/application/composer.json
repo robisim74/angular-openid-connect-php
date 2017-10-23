@@ -2,7 +2,8 @@
     "name": "angular-openid-connect-php/application",
     "description": "Angular & PHP CodeIgniter server through OAuth 2.0 OpenID Connect",
     "require": {
-        "bshaffer/oauth2-server-php": "dev-develop",
+        "bshaffer/oauth2-server-php": "1.9.0",
+        "chriskacerguis/codeigniter-restserver": "3.0.3",
         "kelvinmo/simplejwt": "0.1.5"
     },
     "license": "MIT",

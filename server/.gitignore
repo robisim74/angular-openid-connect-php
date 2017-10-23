@@ -31,3 +31,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 
 application/vendor
+
+public/assets/node_modules
