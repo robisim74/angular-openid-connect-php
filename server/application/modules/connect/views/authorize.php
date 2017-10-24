@@ -1,5 +1,6 @@
 <?php echo form_open("connect/authorize/authorize_post", array('class' => 'form-authorize', 'novalidate' => '')) ?>
     <h2 class="form-authorize-heading"><?= $title ?></h2>
+    <br>
     <p>
         <strong><?= strtoupper($client_id) ?></strong>
     </p>

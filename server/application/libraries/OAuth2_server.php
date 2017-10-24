@@ -76,6 +76,7 @@ class OAuth2_server
         ), $config);
                 
         // OAuth 2.0 Server configuration.
+        // Public & Private key are stored in the PDO storage.
         $this->server = new OAuth2Server($this->storage, array(
             'enforce_state' => true,
             'allow_implicit' => true,
@@ -95,26 +96,10 @@ class OAuth2_server
             'access_lifetime' => 3600
         ));
 
-        // In memory.
-        $this->server->addStorage($this->get_key_storage(), 'public_key');
-
+        // Scopes.
         $scope_util = new Scope($this->get_scopes());
         $this->server->setScopeUtil($scope_util);
         $this->server->addStorage($this->get_scopes(), 'scope');
-    }
-
-    /*
-     * Keys could also be stored in the PDO database by "oauth_public_keys" table.
-     */
-    private function get_key_storage()
-    {
-        $public_key = file_get_contents($this->get_project_root() . '/data/pubkey.pem');
-        $private_key = file_get_contents($this->get_project_root() . '/data/privkey.pem');
-        $memory = new Memory(array('keys' => array(
-            'public_key' => $public_key,
-            'private_key' => $private_key,
-        )));
-        return $memory;
     }
 
     /*
@@ -135,10 +120,5 @@ class OAuth2_server
             'supported_scopes' => $supportedScopes
         ));
         return $memory;
-    }
-
-    private function get_project_root()
-    {
-        return dirname(dirname(__DIR__));
     }
 }

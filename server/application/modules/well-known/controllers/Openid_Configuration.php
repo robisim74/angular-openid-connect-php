@@ -17,9 +17,6 @@ class Openid_Configuration extends CI_Controller
         // Allows CORS.
         $this->output->set_header('Access-Control-Allow-Origin: *');
         $this->output->set_header('Access-Control-Allow-Methods: GET');
-
-        // Authentication library.
-        $this->load->library('ion_auth');
         
         // OAuth 2.0 Server.
         $this->load->library('oauth2_server');
