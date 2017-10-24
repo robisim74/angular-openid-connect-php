@@ -10,6 +10,8 @@ class Auth_Controller extends CI_Controller
 
     public $scripts = array();
 
+    protected $data = array();
+
     public function __construct()
     {
         parent::__construct();

@@ -9,9 +9,7 @@
         <title><?= $this->title ?></title>
 
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="<?= base_url(); ?>public/assets/node_modules/bootstrap/dist/css/bootstrap.min.css">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="<?= base_url(); ?>public/assets/font-awesome/css/font-awesome.min.css">   
+        <link rel="stylesheet" href="<?= base_url(); ?>public/assets/node_modules/bootstrap/dist/css/bootstrap.min.css"> 
         <!-- DataTables -->
         <link rel="stylesheet" href="<?= base_url(); ?>public/assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css">
 
@@ -42,12 +40,9 @@
                 <?php if ($this->logged_in) : ?>
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary">
-                            <i class="fa fa-user"></i>
                             <span>Hi <?php echo $this->user->first_name; ?>!</span>
                         </button>
-                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu">
                             <?= anchor('account/logout', 'Sign out', array('class' => 'dropdown-item')) ?>
                         </div>
@@ -64,14 +59,17 @@
         </main>
 
         <!-- jQuery -->
-        <script src="<?= base_url(); ?>public/assets/node_modules/jQuery/dist/jquery.slim.min.js"></script>
+        <script src="<?= base_url(); ?>public/assets/node_modules/jquery/dist/jquery.slim.min.js"></script>
         <!-- Popper.js -->
         <script src="<?= base_url(); ?>public/assets/node_modules/popper.js/dist/umd/popper.min.js"></script>
         <!-- Bootstrap -->
         <script src="<?= base_url(); ?>public/assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- DataTables -->
         <script src="<?= base_url(); ?>public/assets/node_modules/datatables.net/js/jquery.dataTables.js"></script>
-        <script src="<?= base_url(); ?>public/assets/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>    
+        <script src="<?= base_url(); ?>public/assets/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+        <!-- jQuery Validation-->
+        <script src="<?= base_url(); ?>public/assets/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="<?= base_url(); ?>public/assets/node_modules/jquery-validation/dist/additional-methods.js"></script>  
 
         <?php foreach ($this->scripts as $script) : ?>
             <script src="<?= base_url() ?>public/scripts/<?= $script ?>.js"></script>

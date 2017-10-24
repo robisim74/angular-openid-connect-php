@@ -18,7 +18,7 @@ class Userinfo extends CI_Controller implements UserInfoControllerInterface
         parent::__construct();
         // Allows CORS.
         $this->output->set_header('Access-Control-Allow-Origin: *');
-        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        $this->output->set_header('Access-Control-Allow-Methods: GET, OPTIONS');
         $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
         // Authentication library.

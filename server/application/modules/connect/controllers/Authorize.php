@@ -15,8 +15,7 @@ class Authorize extends Auth_Controller
         parent::__construct();
         // Allows CORS.
         $this->output->set_header('Access-Control-Allow-Origin: *');
-        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        $this->output->set_header('Access-Control-Allow-Methods: GET');
 
         // OAuth 2.0 Server.
         $this->load->library('oauth2_server');

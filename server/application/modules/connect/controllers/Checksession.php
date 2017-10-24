@@ -14,8 +14,6 @@ class Checksession extends CI_Controller
         parent::__construct();
         // Allows CORS.
         $this->output->set_header('Access-Control-Allow-Origin: *');
-        $this->output->set_header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
         // Authentication library.
         $this->load->library('ion_auth');
@@ -27,6 +25,5 @@ class Checksession extends CI_Controller
     public function index()
     {
         // TODO
-
     }
 }

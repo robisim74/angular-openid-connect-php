@@ -19,8 +19,10 @@ class Resource extends REST_Controller
         $this->load->library('oauth2_server');
     }
 
-    // Browsers preflight the request to look for CORS headers.
-    // If the request is acceptable, then they will send the real request.
+    /* 
+     * Browsers preflight the request to look for CORS headers.
+     * If the request is acceptable, then they will send the real request.
+     */
     public function index_options()
     {
         $this->response(null, REST_Controller::HTTP_OK);

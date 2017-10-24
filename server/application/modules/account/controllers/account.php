@@ -5,6 +5,8 @@ class Account extends Auth_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->scripts[] = 'account';
 	}
 
 	public function login()

@@ -18,12 +18,13 @@ class Admin extends Auth_Controller
             $this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
         }
 
-        $this->set_messages();
         $this->render_page('admin');
     }
 
     public function register()
     {
+        $this->authorize_admin();
+
         $this->form_validation->set_rules('first_name', 'First name', 'required');
         $this->form_validation->set_rules('last_name', 'Last name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
@@ -41,7 +42,6 @@ class Admin extends Auth_Controller
             );
 
             if ($this->ion_auth->register($username, $password, $email, $additional_data)) {
-                $this->session->set_flashdata('message', $this->ion_auth->messages());
                 redirect('admin', 'refresh');
             }
         }
@@ -59,11 +59,8 @@ class Admin extends Auth_Controller
 
         $user = $this->ion_auth->user($id)->row();
         if (!$user) {
-            $this->session->set_flashdata('message', 'Utente non trovato.');
             redirect('admin', 'refresh');
         }
-        $groups = $this->ion_auth->groups()->result_array();
-        $currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
         $this->form_validation->set_rules('first_name', 'First name', 'required');
         $this->form_validation->set_rules('last_name', 'Last name', 'required');
@@ -77,54 +74,15 @@ class Admin extends Auth_Controller
                 'email' => $this->input->post('email')
             );
 
-            $groupData = $this->input->post('groups');
-            if (isset($groupData) && !empty($groupData)) {
-                $this->ion_auth->remove_from_group('', $id);
-                foreach ($groupData as $grp) {
-                    $this->ion_auth->add_to_group($grp, $id);
-                }
-            }
-
             if ($this->ion_auth->update($user->id, $data)) {
-                $this->session->set_flashdata('message', 'The user has been saved.');
                 redirect('admin', 'refresh');
             }
         }
 
         $this->data['user'] = $user;
-        $this->data['groups'] = $groups;
-        $this->data['currentGroups'] = $currentGroups;
 
         $this->set_messages();
         $this->render_page('admin/edit_user');
-    }
-
-    public function edit_group($id = '')
-    {
-        if (!$id || empty($id)) {
-            redirect('admin', 'refresh');
-        }
-        $this->authorize_admin();
-
-        $group = $this->ion_auth->group($id)->row();
-
-        $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('description', 'Description', 'required');
-
-        if ($this->form_validation->run() == true) {
-            $name = $this->input->post('name');
-            $description = $this->input->post('description');
-
-            if ($this->ion_auth->update_group($id, $name, $description)) {
-                $this->session->set_flashdata('message', 'The group has been saved.');
-                redirect('admin', 'refresh');
-            }
-        }
-
-        $this->data['group'] = $group;
-
-        $this->set_messages();
-        $this->render_page('admin/edit_group');
     }
 
     public function activate_user($id)

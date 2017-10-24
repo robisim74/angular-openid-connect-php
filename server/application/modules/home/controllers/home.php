@@ -13,7 +13,6 @@ class Home extends Auth_Controller
     {
         $this->authorize();
 
-        $this->set_messages();
         $this->render_page('home');
     }
 }
