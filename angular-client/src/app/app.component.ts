@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityService, AuthorizationResult } from 'angular-auth-oidc-client';
 
 import { AuthService } from './services/auth.service';
 
@@ -11,15 +11,21 @@ import { AuthService } from './services/auth.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
 
-    isAuthorizedSubscription: Subscription;
-    isAuthorized: boolean;
+    navItems: any[] = [
+        { name: 'Home', route: 'home' },
+        { name: 'Resource', route: 'resource' }
+    ];
+
+    isAuthorized: boolean = false;
+    userData: any;
 
     constructor(
+        public title: Title,
         private router: Router,
         private oidcSecurityService: OidcSecurityService,
-        private auth: AuthService
+        private authService: AuthService
     ) {
         if (this.oidcSecurityService.moduleSetup) {
             this.doCallbackLogicIfRequired();
@@ -29,48 +35,57 @@ export class AppComponent implements OnInit, OnDestroy {
             });
         }
 
-        // Manages route on authorized = 1, forbidden = 2, unauthorized = 3.
+        // Manages route.
         this.oidcSecurityService.onAuthorizationResult.subscribe(
-            (result: any) => {
-                if (result == 1) {
-                    this.router.navigate(['/resource']);
+            (result: AuthorizationResult) => {
+                switch (result) {
+                    case AuthorizationResult.authorized:
+                        // Gets the redirect URL from authentication service.
+                        // If no redirect has been set, uses the default.
+                        const redirectUrl: string = this.authService.getRedirectUrl()
+                            ? this.authService.getRedirectUrl()
+                            : '/home';
+                        // Redirects the user.
+                        this.router.navigate([redirectUrl]);
+                        break;
+                    case AuthorizationResult.forbidden:
+                        this.router.navigate(['/forbidden']);
+                        break;
+                    default:
+                        this.router.navigate(['/unauthorized']);
                 }
             }
         );
     }
 
-    ngOnInit() {
-        this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(
+    ngOnInit(): void {
+        this.title.setTitle('Angular OIDC PHP');
+
+        this.oidcSecurityService.getIsAuthorized().subscribe(
             (isAuthorized: boolean) => {
                 this.isAuthorized = isAuthorized;
             });
+
+        this.oidcSecurityService.getUserData().subscribe(
+            (userData: any) => {
+                this.userData = userData;
+            });
     }
 
-    ngOnDestroy(): void {
-        this.isAuthorizedSubscription.unsubscribe();
-        this.oidcSecurityService.onModuleSetup.unsubscribe();
-    }
-
-    login() {
-        console.log('start login');
+    login(): void {
         this.oidcSecurityService.authorize();
     }
 
-    refreshSession() {
-        console.log('start refreshSession');
-        this.oidcSecurityService.authorize();
-    }
-
-    logout() {
-        console.log('start logoff');
-
-        this.auth.revokeToken();
+    logout(): void {
+        // Because we are using a Reference token as Access token we can revoke it.
+        this.authService.revokeToken();
+        this.authService.removeRedirectUrl();
 
         this.oidcSecurityService.logoff();
     }
 
-    private doCallbackLogicIfRequired() {
-        if (window.location.hash) {
+    private doCallbackLogicIfRequired(): void {
+        if (window.location.hash || window.location.search) {
             this.oidcSecurityService.authorizedCallback();
         }
     }

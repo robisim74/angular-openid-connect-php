@@ -3,19 +3,37 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { OidcSecurityService, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
 
-
 @Injectable() export class AuthService {
 
-    /**
-     * Stores the URL so we can redirect after signing in.
-     */
-    public redirectUrl: string;
+    private hasStorage: boolean;
 
     constructor(
         private http: HttpClient,
         private oidcSecurityService: OidcSecurityService,
         private authWellKnownEndpoints: AuthWellKnownEndpoints
-    ) { }
+    ) {
+        this.hasStorage = typeof Storage !== 'undefined';
+    }
+
+    /**
+     * Stores the URL so we can redirect after signing in.
+     */
+    public getRedirectUrl(): string {
+        if (this.hasStorage) {
+            return sessionStorage.getItem('redirectUrl');
+        }
+        return null;
+    }
+
+    public setRedirectUrl(url: string): void {
+        if (this.hasStorage) {
+            sessionStorage.setItem('redirectUrl', url);
+        }
+    }
+
+    public removeRedirectUrl(): void {
+        sessionStorage.removeItem('redirectUrl');
+    }
 
     public getAuthorizationHeader(): HttpHeaders {
         // Creates header for the auth requests.

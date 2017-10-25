@@ -1,0 +1,8 @@
+.resource-card-container {
+    display: flex;
+    flex-direction: column;
+
+    mat-card {
+        margin: 8px 0 8px 0;
+    }
+}

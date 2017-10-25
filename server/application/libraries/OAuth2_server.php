@@ -17,8 +17,6 @@ class OAuth2_server
     public $storage;
     public $server;
 
-    public $response;
-
     protected $CI;
 
     private $dsn;
@@ -43,18 +41,16 @@ class OAuth2_server
 
     public function authorize(RequestInterface $request, $scope, $groups)
     {
-        $this->response = new Response();
+        $response = new Response();
 
         // OAuth 2.0 authentication & scope.
-        if (!$this->server->verifyResourceRequest($request, $this->response, $scope)) {
-            $this->response = $this->server->getResponse();
+        if (!$this->server->verifyResourceRequest($request, $response, $scope)) {
             return FALSE;
         }
 
         // Allowed groups.
-        $token = $this->server->getAccessTokenData($request, $this->response);
+        $token = $this->server->getAccessTokenData($request, $response);
         if (!$this->CI->ion_auth->in_group($groups, $token['user_id'])) {
-            $this->response->setError(401, 'Invalid group');
             return FALSE;
         }
 

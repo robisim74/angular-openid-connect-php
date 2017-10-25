@@ -3,8 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ResourceComponent } from './resource.component';
 
+import { AuthGuard } from '../services/auth.guard';
+
 const routes: Routes = [
-    { path: '', component: ResourceComponent, pathMatch: 'full' }
+    { path: '', component: ResourceComponent, pathMatch: 'full', canActivate: [AuthGuard] }
 ];
 
 @NgModule({

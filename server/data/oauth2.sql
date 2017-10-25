@@ -61,7 +61,7 @@ CREATE TABLE oauth_public_keys (
 )
 
 INSERT INTO oauth_clients (client_id, client_secret, redirect_uri, grant_types, scope) VALUES (
-  "angularclient",
+  "AngularClient",
   "clientsecret",
   "http://localhost:4200",
   "implicit",

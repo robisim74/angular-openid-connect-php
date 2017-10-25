@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+import { AuthConfiguration } from 'angular-auth-oidc-client';
+import { Chart } from 'chart.js';
 
 import { AuthService } from '../services/auth.service';
 
@@ -12,12 +16,16 @@ export class ResourceComponent implements OnInit {
 
     results: any;
 
-    constructor(private http: HttpClient, private auth: AuthService) { }
+    constructor(
+        private router: Router,
+        private http: HttpClient,
+        private authConfiguration: AuthConfiguration,
+        private auth: AuthService) { }
 
     ngOnInit() {
         // Sends an authenticated request.
         this.http
-            .get("http://localhost/angular-openid-connect-php/server/api/resource", {
+            .get(this.authConfiguration.stsServer + "/api/resource", {
                 headers: this.auth.getAuthorizationHeader()
             })
             .subscribe(
@@ -26,13 +34,11 @@ export class ResourceComponent implements OnInit {
             },
             (error: HttpErrorResponse) => {
                 if (error.error instanceof Error) {
-                    // A client-side or network error occurred. Handle it accordingly.
                     console.log('An error occurred:', error.error.message);
                 } else {
-                    // The backend returned an unsuccessful response code.
-                    // The response body may contain clues as to what went wrong,
                     console.log(`Backend returned code ${error.status}, body was: ${error.error}`);
                 }
+                this.router.navigate(['/unauthorized']);
             });
     }
 }

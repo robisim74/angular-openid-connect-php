@@ -34,8 +34,7 @@ class Resource extends REST_Controller
          * OAuth 2.0 authentication: 'resource' scope & 'members' group.
          */
         If (!$this->oauth2_server->authorize(Request::createFromGlobals(), 'resource', ['members'])) {
-            $this->oauth2_server->response->send();
-            die();
+            $this->response(null, REST_Controller::HTTP_UNAUTHORIZED);
         }
 
         /*
