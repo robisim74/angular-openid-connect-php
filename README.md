@@ -50,10 +50,15 @@ However, you can adapt this implementation of OpenID Connect to other frameworks
     - Start your server
 - Angular client
     - Optional: you can move the client wherever you want
+    - Check the `angular-auth-oidc-client` configuration in `src/app/app.module.ts`
     - Go to `[path]/angular-client`: `npm install`
     - Start the app: `ng serve` and visit `http://localhost:4200`
 
 You can also access directly to the simple Admin panel on the Authorization server: `http://localhost/angular-openid-connect-php/server`
+
+Initially, there is only the admin user:
+- **username/email**: `admin@admin.com`
+- **password**: `password`
 
 ## Links
 - [The OAuth 2.0 Authorization Framework - Implicit Grant](https://tools.ietf.org/html/rfc6749#section-4.2)
