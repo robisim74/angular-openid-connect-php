@@ -19,7 +19,7 @@
             <mat-toolbar-row>
                 <span class="fill-remaining-space"></span>
                 <button mat-raised-button color="accent" (click)="login()" *ngIf="!isAuthorized">Sign in</button>
-                <span *ngIf="!!userData">{{ userData['email'] }}&nbsp;&nbsp;</span>
+                <span *ngIf="isAuthorized && !!userData">{{ userData['email'] }}&nbsp;&nbsp;</span>
                 <button mat-raised-button color="primary" (click)="logout()" *ngIf="isAuthorized">Sign out</button>
             </mat-toolbar-row>
         </mat-toolbar>

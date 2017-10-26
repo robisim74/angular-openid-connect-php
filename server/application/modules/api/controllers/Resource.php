@@ -40,7 +40,7 @@ class Resource extends REST_Controller
         /*
          * The request is valid.
          */
-        $data = array('success' => true, 'message' => 'You accessed my APIs!');
+        $data = array(80, 85, 88, 90, 100, 101, 104, 87, 92, 97, 100, 102);
         $this->response($data);
     }
 }

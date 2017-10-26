@@ -1,8 +1,10 @@
 .resource-card-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
 
     mat-card {
         margin: 8px 0 8px 0;
+        width: 80vw;
+        max-width: 600px;
     }
 }

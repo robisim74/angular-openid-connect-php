@@ -58,7 +58,7 @@ import { OidcSecurityService, AuthWellKnownEndpoints } from 'angular-auth-oidc-c
 
             const params: any = {
                 token: token,
-                token_type_hint: "access_token"
+                token_type_hint: 'access_token'
             };
 
             const body: string = this.encodeParams(params);
@@ -69,12 +69,12 @@ import { OidcSecurityService, AuthWellKnownEndpoints } from 'angular-auth-oidc-c
     }
 
     private encodeParams(params: any): string {
-        let body: string = "";
-        for (const key in params) {
+        let body = '';
+        for (const key of Object.keys(params)) {
             if (body.length) {
-                body += "&";
+                body += '&';
             }
-            body += key + "=";
+            body += key + '=';
             body += encodeURIComponent(params[key]);
         }
         return body;

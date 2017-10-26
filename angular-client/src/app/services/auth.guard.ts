@@ -30,7 +30,7 @@ import { AuthService } from './auth.service';
                 // Not signed in so redirects to signin page.
                 this.router.navigate(['/signin']);
                 return false;
-            })
+            });
     }
 
 }

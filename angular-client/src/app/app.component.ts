@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
         { name: 'Resource', route: 'resource' }
     ];
 
-    isAuthorized: boolean = false;
+    isAuthorized = false;
     userData: any;
 
     constructor(
