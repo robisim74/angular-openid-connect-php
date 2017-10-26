@@ -30,6 +30,15 @@ However, you can adapt this implementation of OpenID Connect to other frameworks
 	- **ion_auth.sql** _Schema for Ion Auth 2_
     - **oauth2.sql** _Schema for OAuth2 Server_
 
+## Diagrams
+The following component and sequence diagrams show the architecture and the behavior of the project.
+
+#### Component diagram
+![OIDC-Component-diagram](./OIDC-Component-diagram.png)
+
+#### Sequence diagram
+![OIDC-Sequence-diagram](./OIDC-Sequence-diagram.png)
+
 ## Installing
 - **Requirements**
 	- PHP version 5.6 or newer
