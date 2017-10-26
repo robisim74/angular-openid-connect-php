@@ -4,7 +4,6 @@
 
 Get the [Changelog](https://github.com/robisim74/angular-openid-connect-php/blob/master/CHANGELOG.md).
 
-
 The purpose of this project is to implement a client app built with Angular 2+ that, through OAauth2 OpenID Connect implicit flow, communicates safely with an API server in PHP. The API server in this project is also the Authorization server, but they could also be on two different servers.
 
 In the Angular app, the OIDC implicit flow is implemented using the library certified by OpenID Foundation [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
@@ -50,7 +49,7 @@ However, you can adapt this implementation of OpenID Connect to other frameworks
     - Start your server
 - Angular client
     - Optional: you can move the client wherever you want
-    - Check the `angular-auth-oidc-client` configuration in `src/app/app.module.ts`
+    - Check the `angular-auth-oidc-client` configuration in `[path]/angular-client/src/app/app.module.ts`
     - Go to `[path]/angular-client`: `npm install`
     - Start the app: `ng serve` and visit `http://localhost:4200`
 
