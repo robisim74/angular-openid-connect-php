@@ -54,5 +54,5 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 /* Remaps urls for discovery endpoints */
-$route['.well-known/openid-configuration'] = 'well-known/openid_configuration';
-$route['.well-known/openid-configuration/jwks'] = 'well-known/openid_configuration/jwks';
+$route['.well-known/openid-configuration'] = 'well_known/openid_configuration';
+$route['.well-known/openid-configuration/jwks'] = 'well_known/openid_configuration/jwks';
