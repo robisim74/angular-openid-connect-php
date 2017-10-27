@@ -25,7 +25,7 @@ However, you can adapt this implementation of OpenID Connect to other frameworks
         - **admin** _Admin panel_ 
         - **api** _restServer APIs_
         - **connect** _OpenID connect endpoints_*
-        - **well-known** _OpenID connect discovery document_*
+        - **well_known** _OpenID connect discovery document_*
 - **data** _sql files_
 	- **ion_auth.sql** _Schema for Ion Auth 2_
     - **oauth2.sql** _Schema for OAuth2 Server_
