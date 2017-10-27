@@ -9,6 +9,25 @@
 		<?php echo anchor("admin/register", '<button class="btn btn-primary">Register</button>'); ?>
 	</div>
 </div>
+<?php if ($error_message || isset($_SESSION['error_message'])) : ?>
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<h4><i class="fa fa-warning"></i> Warning!</h4>
+		<?= $error_message ?>
+		<?= $_SESSION['error_message'] ?>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+<?php endif ?>
+<?php if (isset($_SESSION['message'])) : ?>
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		<h4><i class="fa fa-check"></i> Message!</h4>
+		<?= $_SESSION['message'] ?>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+<?php endif ?>
 <br>
 <table id="users-table" class="table table-striped table-bordered">
 	<thead class="thead-dark">

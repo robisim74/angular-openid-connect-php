@@ -18,6 +18,7 @@ class Admin extends Auth_Controller
             $this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
         }
 
+        $this->set_messages();
         $this->render_page('admin');
     }
 
@@ -42,6 +43,7 @@ class Admin extends Auth_Controller
             );
 
             if ($this->ion_auth->register($username, $password, $email, $additional_data)) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
                 redirect('admin', 'refresh');
             }
         }
@@ -75,6 +77,7 @@ class Admin extends Auth_Controller
             );
 
             if ($this->ion_auth->update($user->id, $data)) {
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
                 redirect('admin', 'refresh');
             }
         }
