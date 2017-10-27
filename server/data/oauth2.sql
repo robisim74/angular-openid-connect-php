@@ -58,7 +58,7 @@ CREATE TABLE oauth_public_keys (
   public_key           VARCHAR(2000),
   private_key          VARCHAR(2000),
   encryption_algorithm VARCHAR(100) DEFAULT 'RS256'
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO oauth_clients (client_id, client_secret, redirect_uri, grant_types, scope) VALUES (
   "AngularClient",
