@@ -21,7 +21,7 @@ class Endsession extends CI_Controller
         $this->load->library('ion_auth');
         
         // OAuth 2.0 Server.
-        $this->load->library('oauth2_server');
+        $this->load->library('OAuth2_server');
     }
 
     public function index()

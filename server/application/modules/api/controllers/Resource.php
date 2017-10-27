@@ -16,7 +16,7 @@ class Resource extends REST_Controller
         $this->output->set_header('Access-Control-Allow-Headers: Content-Type, Authorization');
         
         // OAuth 2.0 Server.
-        $this->load->library('oauth2_server');
+        $this->load->library('OAuth2_server');
     }
 
     /* 

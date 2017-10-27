@@ -18,7 +18,7 @@ class Revocation extends CI_Controller
         $this->output->set_header('Access-Control-Allow-Methods: POST');
         
         // OAuth 2.0 Server.
-        $this->load->library('oauth2_server');
+        $this->load->library('OAuth2_server');
     }
 
     public function index()

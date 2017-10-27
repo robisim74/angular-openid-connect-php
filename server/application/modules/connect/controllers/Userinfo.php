@@ -25,7 +25,7 @@ class Userinfo extends CI_Controller implements UserInfoControllerInterface
         $this->load->library('ion_auth');
         
         // OAuth 2.0 Server.
-        $this->load->library('oauth2_server');
+        $this->load->library('OAuth2_server');
     }
 
     public function index()
