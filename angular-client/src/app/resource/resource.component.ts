@@ -47,7 +47,6 @@ export class ResourceComponent implements OnInit {
             })
             .subscribe(
             (data: any) => {
-                console.log(data);
                 this.populateChart(data, this.months);
             },
             (error: HttpErrorResponse) => {

@@ -10,7 +10,7 @@ In the Angular app, the OIDC implicit flow is implemented using the library cert
 
 Server side, the OIDC implicit flow is implemented using [OAuth 2.0 Server PHP](https://bshaffer.github.io/oauth2-server-php-docs/)
 
-As PHP framework is used [CodeIgniter](https://codeigniter.com/), and [Ion Auth 2](https://github.com/benedmunds/CodeIgniter-Ion-Auth) as authentication system. The CodeIgniter extensions used are: [Modular Extensions - HMVC](https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc) and [Rest Server](https://github.com/chriskacerguis/codeigniter-restserver) for the API.
+As PHP framework is used [CodeIgniter](https://codeigniter.com/), and [Ion Auth 2](https://github.com/benedmunds/CodeIgniter-Ion-Auth) as authentication system. The CodeIgniter extensions used are [Modular Extensions - HMVC](https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc) and [Rest Server](https://github.com/chriskacerguis/codeigniter-restserver) for the API.
 
 However, you can adapt this implementation of OpenID Connect to other frameworks: you only need MVC pattern, routing, and authentication system: the files to be adapted are marked with an asterisk in the following structure.
 
@@ -67,6 +67,12 @@ You can also access directly to the simple Admin panel on the Authorization serv
 Initially, there is only the admin user:
 - **username/email**: `admin@admin.com`
 - **password**: `password`
+
+## Live example
+A live demo of the project is also available. For convenience, both the Angular client and the PHP server are deployed on the same server (the second one is in a subdirectory).
+
+- Angular client: http://angular-oidc-php.infinityfreeapp.com
+- PHP server: http://angular-oidc-php.infinityfreeapp.com/server
 
 ## Links
 - [The OAuth 2.0 Authorization Framework - Implicit Grant](https://tools.ietf.org/html/rfc6749#section-4.2)
