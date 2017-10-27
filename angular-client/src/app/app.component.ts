@@ -51,8 +51,11 @@ export class AppComponent implements OnInit {
                     case AuthorizationResult.forbidden:
                         this.router.navigate(['/forbidden']);
                         break;
-                    default:
+                    case AuthorizationResult.unauthorized:
                         this.router.navigate(['/unauthorized']);
+                        break;
+                    default:
+                        this.router.navigate(['/home']);
                 }
             }
         );
