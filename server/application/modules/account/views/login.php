@@ -11,10 +11,5 @@
     <?php endif ?>
     <input type="email" id="email" class="form-control" name="identity" value="<?php echo set_value('identity'); ?>" placeholder="Email" autofocus>
     <input type="password" id="password" class="form-control" name="password" value="<?php echo set_value('password'); ?>" placeholder="Password">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" id="remember" value="false"> Remember me
-        </label>
-    </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>

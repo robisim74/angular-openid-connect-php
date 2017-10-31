@@ -24,7 +24,10 @@ class Account extends Auth_Controller
 		}
 
 		if ($this->form_validation->run() == true) {
-			$remember = (bool)$this->input->post('remember');
+
+			// Session management:
+			// we set "remember" to TRUE, so Ion Auth 2 generates a cookie for the user session.
+			$remember = TRUE;
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
 				redirect($redirect_url, 'refresh');

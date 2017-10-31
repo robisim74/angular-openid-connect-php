@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { OidcSecurityService, AuthorizationResult } from 'angular-auth-oidc-client';
+import { OidcSecurityService, OidcSecurityCheckSession, AuthorizationResult } from 'angular-auth-oidc-client';
 
 import { AuthService } from './services/auth.service';
 
@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
         public title: Title,
         private router: Router,
         private oidcSecurityService: OidcSecurityService,
+        private oidcSecurityCheckSession: OidcSecurityCheckSession,
         private authService: AuthService
     ) {
         if (this.oidcSecurityService.moduleSetup) {
@@ -59,6 +60,12 @@ export class AppComponent implements OnInit {
                 }
             }
         );
+
+        // Session management.
+        this.oidcSecurityCheckSession.onCheckSessionChanged.subscribe(
+            () => {
+                this.refreshSession();
+            });
     }
 
     ngOnInit(): void {
@@ -85,6 +92,13 @@ export class AppComponent implements OnInit {
         this.authService.removeRedirectUrl();
 
         this.oidcSecurityService.logoff();
+    }
+
+    refreshSession(): void {
+        this.authService.revokeToken();
+        // Stores the attempted URL for redirecting.
+        this.authService.setRedirectUrl(this.router.url);
+        this.oidcSecurityService.authorize();
     }
 
     private doCallbackLogicIfRequired(): void {

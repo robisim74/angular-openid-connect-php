@@ -42,7 +42,7 @@ export class ResourceComponent implements OnInit {
 
         // Sends an authenticated request.
         this.http
-            .get(this.authConfiguration.stsServer + '/api/resource', {
+            .get(this.authConfiguration.stsServer + '/angular-openid-connect-php/server/api/resource', {
                 headers: this.auth.getAuthorizationHeader()
             })
             .subscribe(

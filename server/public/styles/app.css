@@ -11,13 +11,9 @@ body {
     margin: 0 auto;
 }
 .form-signin .form-signin-heading,
-.form-signin .checkbox,
 .form-authorize .form-authorize-heading,
 .form-authorize .list-group {
     margin-bottom: 10px;
-}
-.form-signin .checkbox {
-    font-weight: 400;
 }
 .form-signin .form-control {
     position: relative;
@@ -38,6 +34,6 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-.form-signin .checkbox {
+.form-signin button {
     margin-top: 10px;
 }
