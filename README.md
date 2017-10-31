@@ -30,7 +30,7 @@ However, you can adapt this implementation of OpenID Connect to other frameworks
 	- **ion_auth.sql** _Schema for Ion Auth 2_
     - **oauth2.sql** _Schema for OAuth2 Server_
 
-## Diagrams
+## Architecture
 The following component and sequence diagrams show the architecture and the behavior of the project.
 
 #### Component diagram
@@ -38,6 +38,9 @@ The following component and sequence diagrams show the architecture and the beha
 
 #### Sequence diagram
 ![OIDC-Sequence-diagram](./OIDC-Sequence-diagram.png)
+
+After the user has been authorized, requests are sent through _iframe_ and at regular intervals to _Checksession_ endpoint to verify that the user is always logged in the Authorization server.
+On the expiration of the Access token (after 15 minutes in this project), a new token is automatically prompted to the Authorization server via _silent renew_.
 
 ## Installing
 - **Requirements**
