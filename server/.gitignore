@@ -32,6 +32,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 data/*.pem
 
+application/config/production/*
+
 application/vendor
 
 public/assets/node_modules

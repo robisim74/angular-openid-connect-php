@@ -54,8 +54,8 @@ On the expiration of the Access token (after 15 minutes in this project), a new 
 - Server
 	- Create a MySQL `auth_db`
     - Import the sql files from `data` folder
-    - Check the db configuration in `application/config/database.php`
-    - Check the `base_url` configuration in `application/config/config.php`
+    - Check the db configuration in `application/config/development/database.php`
+    - Check the `base_url` configuration in `application/config/development/config.php`
     - Go to `[path]/server/application`: `composer install`
     - Go to `[path]/server/public/assets`: `npm install`
     - Start your server

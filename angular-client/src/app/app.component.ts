@@ -116,7 +116,10 @@ export class AppComponent implements OnInit {
 
     private doCallbackLogicIfRequired(): void {
         if (window.location.hash || window.location.search) {
-            this.oidcSecurityService.authorizedCallback();
+            // Only for production.
+            if (window.location.search.match(/\^?i=/) == null) {
+                this.oidcSecurityService.authorizedCallback();
+            }
         }
     }
 

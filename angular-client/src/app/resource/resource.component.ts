@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthConfiguration } from 'angular-auth-oidc-client';
 import { Chart } from 'chart.js';
 
+import { environment } from '../../environments/environment';
+
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -13,6 +15,8 @@ import { AuthService } from '../services/auth.service';
     styleUrls: ['./resource.component.scss']
 })
 export class ResourceComponent implements OnInit {
+
+    url: string;
 
     resourceChart: any;
 
@@ -34,7 +38,14 @@ export class ResourceComponent implements OnInit {
         private elementRef: ElementRef,
         private http: HttpClient,
         private authConfiguration: AuthConfiguration,
-        private auth: AuthService) { }
+        private auth: AuthService) {
+
+        if (environment.production) {
+            this.url = "/server/api/resource";
+        } else {
+            this.url = "/angular-openid-connect-php/server/api/resource";
+        }
+    }
 
     ngOnInit() {
         const ctx: HTMLElement = this.elementRef.nativeElement.querySelector('#resourceChart');
@@ -42,7 +53,7 @@ export class ResourceComponent implements OnInit {
 
         // Sends an authenticated request.
         this.http
-            .get(this.authConfiguration.stsServer + '/angular-openid-connect-php/server/api/resource', {
+            .get(this.authConfiguration.stsServer + this.url, {
                 headers: this.auth.getAuthorizationHeader()
             })
             .subscribe(
