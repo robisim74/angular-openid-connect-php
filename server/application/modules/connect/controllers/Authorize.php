@@ -27,6 +27,25 @@ class Authorize extends Auth_Controller
      */
     public function index()
     {
+        $request = Request::createFromGlobals();
+        $response = new Response();
+
+        // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
+        if (!$this->oauth2_server->server->validateAuthorizeRequest($request, $response)) {
+            $this->oauth2_server->server->getResponse()->send();
+            die();
+        }
+
+        // Stores the request.
+        $this->session->set_flashdata('request', $request);
+
+        // Silent renew.
+        // The Authorization Server MUST NOT display any authentication or consent user interface pages.
+        $prompt = $request->query('prompt');
+        if ($prompt && $prompt == 'none') {
+            $this->authorize_post(TRUE);
+        }
+
         // Authenticates End-User.
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Authenticates
         if (!$this->ion_auth->logged_in()) {
@@ -37,15 +56,6 @@ class Authorize extends Auth_Controller
             redirect('account/login', 'refresh');
         }
 
-        $request = Request::createFromGlobals();
-        $response = new Response();
-                
-        // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if (!$this->oauth2_server->server->validateAuthorizeRequest($request, $response)) {
-            $this->oauth2_server->server->getResponse()->send();
-            die();
-        }
-
         // Obtains End-User Consent/Authorization.
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Consent.
         $scopes = $this->oauth2_server->server->getStorage('scope')->supportedScopes;
@@ -54,19 +64,16 @@ class Authorize extends Auth_Controller
         $this->data['client_id'] = $request->query('client_id');
         $this->data['scopes'] = $scopes;
 
-        // Stores the request.
-        $this->session->set_flashdata('request', $request);
-
         $this->load->view('connect/authorize', $this->data);
     }
 
-    public function authorize_post()
+    public function authorize_post($no_prompt = FALSE)
     {
 		// Gets the request.
         $request = $this->session->flashdata('request');
         $response = new Response();
 
-        $is_authorized = isset($_POST['authorize']);
+        $is_authorized = isset($_POST['authorize']) || $no_prompt;
         $user_id = $this->ion_auth->get_user_id();
 
         $this->oauth2_server->server->handleAuthorizeRequest($request, $response, $is_authorized, $user_id);

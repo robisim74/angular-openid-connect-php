@@ -27,8 +27,8 @@ import { AuthService } from './auth.service';
                 // Stores the attempted URL for redirecting.
                 this.authService.setRedirectUrl(state.url);
 
-                // Not signed in so redirects to signin page.
-                this.oidcSecurityService.authorize();
+                // Not signed in so redirects to unauthorized page.
+                this.router.navigate(['/unauthorized']);
                 return false;
             });
     }

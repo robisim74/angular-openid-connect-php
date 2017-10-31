@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+
 @Component({
     selector: 'app-unauthorized',
     templateUrl: './unauthorized.component.html',
@@ -7,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UnauthorizedComponent implements OnInit {
 
-    constructor() { }
+    constructor(private oidcSecurityService: OidcSecurityService) { }
 
     ngOnInit() {
         //
+    }
+
+    login(): void {
+        this.oidcSecurityService.authorize();
     }
 
 }

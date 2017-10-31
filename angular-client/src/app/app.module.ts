@@ -50,7 +50,7 @@ export class AppModule {
         openIDImplicitFlowConfiguration.post_logout_redirect_uri = 'http://localhost:4200';
         openIDImplicitFlowConfiguration.trigger_authorization_result_event = true;
         openIDImplicitFlowConfiguration.start_checksession = true;
-        openIDImplicitFlowConfiguration.silent_renew = false;
+        openIDImplicitFlowConfiguration.silent_renew = true;
         openIDImplicitFlowConfiguration.silent_renew_offset_in_seconds = 10;
         openIDImplicitFlowConfiguration.post_login_route = '/home';
         openIDImplicitFlowConfiguration.forbidden_route = '/forbidden';
@@ -59,8 +59,9 @@ export class AppModule {
         openIDImplicitFlowConfiguration.log_console_warning_active = true;
         openIDImplicitFlowConfiguration.log_console_debug_active = true;
         openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds = 10;
-        openIDImplicitFlowConfiguration.override_well_known_configuration = true
-        openIDImplicitFlowConfiguration.override_well_known_configuration_url = 'http://localhost/angular-openid-connect-php/server/.well-known/openid-configuration';
+        openIDImplicitFlowConfiguration.override_well_known_configuration = true;
+        openIDImplicitFlowConfiguration.override_well_known_configuration_url =
+            'http://localhost/angular-openid-connect-php/server/.well-known/openid-configuration';
 
         this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration);
     }

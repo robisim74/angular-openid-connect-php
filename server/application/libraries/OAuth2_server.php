@@ -88,8 +88,8 @@ class OAuth2_server
              * 
              *'use_jwt_access_tokens' => true,
              */
-            'id_lifetime' => 3600,
-            'access_lifetime' => 3600
+            'id_lifetime' => 900,
+            'access_lifetime' => 900
         ));
 
         // Scopes.

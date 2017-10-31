@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { OidcSecurityService, OidcSecurityCheckSession, AuthorizationResult } from 'angular-auth-oidc-client';
+import {
+    OidcSecurityService,
+    OidcSecurityCheckSession,
+    OidcSecuritySilentRenew,
+    AuthorizationResult
+} from 'angular-auth-oidc-client';
 
 import { AuthService } from './services/auth.service';
 
@@ -26,8 +31,16 @@ export class AppComponent implements OnInit {
         private router: Router,
         private oidcSecurityService: OidcSecurityService,
         private oidcSecurityCheckSession: OidcSecurityCheckSession,
+        private oidcSecuritySilentRenew: OidcSecuritySilentRenew,
         private authService: AuthService
     ) {
+        // Adds "prompt=none" for silent renew.
+        const service: any = (this.oidcSecuritySilentRenew as any);
+        const originalStartRenew: any = service.startRenew;
+        service.startRenew = (url: string) => {
+            originalStartRenew.call(this.oidcSecuritySilentRenew, url += '&prompt=' + 'none');
+        };
+
         if (this.oidcSecurityService.moduleSetup) {
             this.doCallbackLogicIfRequired();
         } else {
