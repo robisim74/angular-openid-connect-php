@@ -1,5 +1,9 @@
 ## Angular OIDC PHP - Changelog
 
+<a name="Nov 11, 2017"></a>
+### Nov 11, 2017
+* Upgrade to Angular v5 & Angular CLI 1.5
+
 <a name="Oct 31, 2017"></a>
 ### Oct 31, 2017
 * Session management: implement Checksession endpoint
