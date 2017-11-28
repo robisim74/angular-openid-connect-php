@@ -10,6 +10,7 @@
       "assets": [
         "assets",
         "favicon.ico",
+        "silent-refresh.html",
         ".htaccess"
       ],
       "index": "index.html",
@@ -56,8 +57,7 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "component": {
-    }
+    "component": {}
   },
   "warnings": {
     "typescriptMismatch": false

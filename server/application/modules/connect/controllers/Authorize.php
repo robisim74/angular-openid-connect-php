@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 use OAuth2\Request;
 use OAuth2\Response;
@@ -43,7 +43,14 @@ class Authorize extends Auth_Controller
         // The Authorization Server MUST NOT display any authentication or consent user interface pages.
         $prompt = $request->query('prompt');
         if ($prompt && $prompt == 'none') {
-            $this->authorize_post(TRUE);
+            if ($this->ion_auth->logged_in()) {
+                $this->authorize_post(TRUE);
+            } else {
+                $redirect_uri = $request->query['redirect_uri'];
+                $response->setRedirect(302, $redirect_uri);
+                $response->send();
+                die();
+            }
         }
 
         // Authenticates End-User.
@@ -97,7 +104,9 @@ class Authorize extends Auth_Controller
     private function calculate_session_state($request, $browser_state)
     {
         $client_id = $request->query('client_id');
-        $origin = $request->query('redirect_uri');
+        // Redirect URI in the request is different for silent renew.
+        $client_details = $this->oauth2_server->server->getStorage('client')->getClientDetails($client_id);
+        $origin = $client_details['redirect_uri'];
         $salt = $this->base64url_encode(random_bytes(16));
         $hash = hash('sha256', sprintf('%s%s%s%s', $client_id, $origin, $browser_state, $salt));
         return sprintf('%s.%s', $hash, $salt);

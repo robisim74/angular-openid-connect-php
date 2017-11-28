@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
     selector: 'app-unauthorized',
@@ -9,14 +9,14 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 })
 export class UnauthorizedComponent implements OnInit {
 
-    constructor(private oidcSecurityService: OidcSecurityService) { }
+    constructor(private oAuthService: OAuthService) { }
 
     ngOnInit() {
         //
     }
 
     login(): void {
-        this.oidcSecurityService.authorize();
+        this.oAuthService.initImplicitFlow();
     }
 
 }

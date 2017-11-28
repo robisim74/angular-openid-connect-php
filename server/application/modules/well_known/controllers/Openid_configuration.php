@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 use OAuth2\Scope;
 use SimpleJWT\Keys\KeySet;
@@ -27,7 +27,7 @@ class Openid_Configuration extends CI_Controller
      */
     public function index()
     {
-        $issuer = $_SERVER['HTTP_HOST'];
+        $issuer = isset($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['HTTP_HOST'];
 
         // Gets the base URL.
         $base_url = base_url();

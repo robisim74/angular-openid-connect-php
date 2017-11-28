@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 use OAuth2\Request;
 use OAuth2\Response;
@@ -73,24 +73,28 @@ class OAuth2_server
                 
         // OAuth 2.0 Server configuration.
         // Public & Private key are stored in the PDO storage.
-        $this->server = new OAuth2Server($this->storage, array(
-            'enforce_state' => true,
-            'allow_implicit' => true,
-            'use_openid_connect' => true,
-            'issuer' => $_SERVER['HTTP_HOST'],
-            /*
-             * Where a self-contained token (JWT token) is hard to revoke before its expiration time, 
-             * a reference token only lives as long as it exists in the STS data store. This allows for scenarios like:
-             *
-             * - revoking the token in an “emergency” case (lost phone, phishing attack etc.)
-             * - invalidate tokens at user logout time or app uninstall
-             * https://leastprivilege.com/2015/11/25/reference-tokens-and-introspection/
-             * 
-             *'use_jwt_access_tokens' => true,
-             */
-            'id_lifetime' => 900,
-            'access_lifetime' => 900
-        ));
+        $this->server = new OAuth2Server(
+            $this->storage,
+            array(
+                'enforce_state' => true,
+                'allow_implicit' => true,
+                'use_openid_connect' => true,
+                'issuer' => isset($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['HTTP_HOST'],
+                /*
+                 * Where a self-contained token (JWT token) is hard to revoke before its expiration time, 
+                 * a reference token only lives as long as it exists in the STS data store. This allows for scenarios like:
+                 *
+                 * - revoking the token in an “emergency” case (lost phone, phishing attack etc.)
+                 * - invalidate tokens at user logout time or app uninstall
+                 * https://leastprivilege.com/2015/11/25/reference-tokens-and-introspection/
+                 * 
+                 *'use_jwt_access_tokens' => true,
+                 */
+                'id_lifetime' => 900,
+                'access_lifetime' => 900,
+                'require_exact_redirect_uri' => false // For silent refresh.
+            )
+        );
 
         // Scopes.
         $scope_util = new Scope($this->get_scopes());

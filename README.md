@@ -1,12 +1,12 @@
 # Angular OpenID Connect PHP
 
-> **Angular v5** & PHP CodeIgniter server through OAuth 2.0 OpenID Connect. The OAuth 2.0 OpenID Connect implicit flow is implemented using angular-auth-oidc-client and OAuth 2.0 Server PHP. CodeIgniter Ion Auth 2 is used as authentication system.
+> **Angular v5** & PHP CodeIgniter server through OAuth 2.0 OpenID Connect. The OAuth 2.0 OpenID Connect implicit flow is implemented using angular-oauth2-oidc and OAuth 2.0 Server PHP. CodeIgniter Ion Auth 2 is used as authentication system.
 
 Get the [Changelog](https://github.com/robisim74/angular-openid-connect-php/blob/master/CHANGELOG.md).
 
 The purpose of this project is to implement a client app built with Angular that, through OAauth2 OpenID Connect implicit flow, communicates safely with an API server in PHP. The API server in this project is also the Authorization server, but they could also be on two different servers.
 
-In the Angular app, the OIDC implicit flow is implemented using the library certified by OpenID Foundation [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
+In the Angular app, the OIDC implicit flow is implemented using the library certified by OpenID Foundation [angular-oauth2-oidc](https://manfredsteyer.github.io/angular-oauth2-oidc/angular-oauth2-oidc/docs/index.html)
 
 Server side, the OIDC implicit flow is implemented using [OAuth 2.0 Server PHP](https://bshaffer.github.io/oauth2-server-php-docs/)
 
@@ -61,7 +61,7 @@ On the expiration of the Access token (after 15 minutes in this project), a new 
     - Start your server
 - Angular client
     - Optional: you can move the client wherever you want
-    - Check the `angular-auth-oidc-client` configuration in `[path]/angular-client/src/app/app.module.ts`
+    - Check the `angular-oauth2-oidc` configuration in `[path]/angular-client/src/app/oauth.config.ts`
     - Go to `[path]/angular-client`: `npm install`
     - Start the app: `ng serve` and visit `http://localhost:4200`
 

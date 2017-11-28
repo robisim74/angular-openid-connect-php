@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
-import {
-    OidcSecurityService,
-    OidcSecurityCheckSession,
-    AuthorizationResult
-} from 'angular-auth-oidc-client';
+import { OAuthService, JwksValidationHandler } from 'angular-oauth2-oidc';
 
 import { AuthService } from './services/auth.service';
+import { User } from './models/user';
+import { oAuthDevelopmentConfig, oAuthProductionConfig } from './oauth.config';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -22,96 +22,97 @@ export class AppComponent implements OnInit {
         { name: 'Resource', route: 'resource' }
     ];
 
-    isAuthorized = false;
-    userData: any;
+    signedIn: Observable<boolean>;
+    email: string;
 
     constructor(
         public title: Title,
         private router: Router,
-        private oidcSecurityService: OidcSecurityService,
-        private oidcSecurityCheckSession: OidcSecurityCheckSession,
+        private oAuthService: OAuthService,
         private authService: AuthService
     ) {
-        if (this.oidcSecurityService.moduleSetup) {
-            this.doCallbackLogicIfRequired();
+        let url: string
+
+        if (environment.production) {
+            // Production environment.
+            this.oAuthService.configure(oAuthProductionConfig);
+            url = 'http://angular-oidc-php.infinityfreeapp.com/server/.well-known/openid-configuration';
         } else {
-            this.oidcSecurityService.onModuleSetup.subscribe(() => {
-                this.doCallbackLogicIfRequired();
-            });
+            // Development environment.
+            this.oAuthService.configure(oAuthDevelopmentConfig);
+            url = 'http://localhost/angular-openid-connect-php/server/.well-known/openid-configuration';
         }
 
-        // Manages route.
-        this.oidcSecurityService.onAuthorizationResult.subscribe(
-            (result: AuthorizationResult) => {
-                switch (result) {
-                    case AuthorizationResult.authorized:
-                        // Gets the redirect URL from authentication service.
+        // Defines the storage.
+        this.oAuthService.setStorage(sessionStorage);
+
+        this.oAuthService.tokenValidationHandler = new JwksValidationHandler();
+
+        // Loads discovery document & tries login.
+        this.oAuthService.loadDiscoveryDocument(url).then((doc: any) => {
+            // Stores discovery document.
+            this.authService.setItem('discoveryDocument', doc.info.discoveryDocument);
+            // Tries login.
+            this.oAuthService.tryLogin({
+                onTokenReceived: context => {
+                    // Loads user profile.
+                    this.oAuthService.loadUserProfile().then(() => {
+                        this.authService.init();
+
+                        // Gets the redirect URL.
                         // If no redirect has been set, uses the default.
-                        const redirectUrl: string = this.authService.getRedirectUrl()
-                            ? this.authService.getRedirectUrl()
+                        const redirect: string = this.authService.getItem('redirectUrl')
+                            ? this.authService.getItem('redirectUrl')
                             : '/home';
                         // Redirects the user.
-                        this.router.navigate([redirectUrl]);
-                        break;
-                    case AuthorizationResult.forbidden:
-                        this.router.navigate(['/forbidden']);
-                        break;
-                    case AuthorizationResult.unauthorized:
-                        this.router.navigate(['/unauthorized']);
-                        break;
-                    default:
-                        this.router.navigate(['/home']);
+                        this.router.navigate([redirect]);
+                    });
                 }
-            }
-        );
-
-        // Session management.
-        this.oidcSecurityCheckSession.onCheckSessionChanged.subscribe(
-            () => {
-                this.refreshSession();
+            }).then(() => {
+                // Manages consent error.
+                if (window.location.search && window.location.search.match(/\^?error=consent_required/) != null) {
+                    this.router.navigate(['/forbidden']);
+                }
             });
+        });
+
+        // Setups silent refresh.
+        this.oAuthService.setupAutomaticSilentRefresh();
+
+        // Events.
+        // On silently refreshed.
+        this.oAuthService.events.filter(e => e.type === 'silently_refreshed').subscribe(e => {
+            this.oAuthService.loadUserProfile();
+        });
+
+        // On session terminated.
+        this.oAuthService.events.filter(e => e.type === 'session_terminated').subscribe(e => {
+            this.authService.refreshSession();
+        });
+
+        // Already authorized.
+        if (this.oAuthService.hasValidAccessToken()) {
+            this.authService.init();
+        }
     }
 
     ngOnInit(): void {
         this.title.setTitle('Angular OIDC PHP');
 
-        this.oidcSecurityService.getIsAuthorized().subscribe(
-            (isAuthorized: boolean) => {
-                this.isAuthorized = isAuthorized;
-            });
+        this.signedIn = this.authService.isSignedIn();
 
-        this.oidcSecurityService.getUserData().subscribe(
-            (userData: any) => {
-                this.userData = userData;
+        this.authService.userChanged().subscribe(
+            (user: User) => {
+                this.email = user.email;
             });
     }
 
     login(): void {
-        this.oidcSecurityService.authorize();
+        this.oAuthService.initImplicitFlow();
     }
 
     logout(): void {
-        // Because we are using a Reference token as Access token we can revoke it.
-        this.authService.revokeToken();
-        this.authService.removeRedirectUrl();
-
-        this.oidcSecurityService.logoff();
-    }
-
-    refreshSession(): void {
-        this.authService.revokeToken();
-        // Stores the attempted URL for redirecting.
-        this.authService.setRedirectUrl(this.router.url);
-        this.oidcSecurityService.authorize();
-    }
-
-    private doCallbackLogicIfRequired(): void {
-        if (window.location.hash || window.location.search) {
-            // Only for production.
-            if (window.location.search.match(/\^?i=/) == null) {
-                this.oidcSecurityService.authorizedCallback();
-            }
-        }
+        this.authService.signout();
     }
 
 }

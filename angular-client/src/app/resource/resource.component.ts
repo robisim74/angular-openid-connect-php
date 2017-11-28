@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { AuthConfiguration } from 'angular-auth-oidc-client';
 import { Chart } from 'chart.js';
 
 import { environment } from '../../environments/environment';
@@ -37,8 +36,7 @@ export class ResourceComponent implements OnInit {
         private router: Router,
         private elementRef: ElementRef,
         private http: HttpClient,
-        private authConfiguration: AuthConfiguration,
-        private auth: AuthService) {
+        private authService: AuthService) {
 
         if (environment.production) {
             this.url = "/server/api/resource";
@@ -53,8 +51,8 @@ export class ResourceComponent implements OnInit {
 
         // Sends an authenticated request.
         this.http
-            .get(this.authConfiguration.stsServer + this.url, {
-                headers: this.auth.getAuthorizationHeader()
+            .get(this.authService.getItem('discoveryDocument').issuer + this.url, {
+                headers: this.authService.getAuthorizationHeader()
             })
             .subscribe(
             (data: any) => {
